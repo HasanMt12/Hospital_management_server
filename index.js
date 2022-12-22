@@ -1,7 +1,7 @@
 const express = require('express')
 require("dotenv").config();
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -10,8 +10,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-console.log(process.env.DB_USER, process.env.DB_PASSWORD);
 
 
 const uri =
@@ -26,26 +24,82 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const doctorsDb = client
+    const doctorsCollection = client
       .db("ManagementHospital")
       .collection("doctorsCollection");
 
-    app.get('/doctors' , async(req,res) => {
-        const query = {};
-        const allDoctors = await doctorsDb.find(query).toArray();
-        res.send(allDoctors);
-    })
+    const treatmentsCollection = client
+      .db("ManagementHospital")
+      .collection("treatmentsCollection");
 
-    app.post("/doctors", async (req,res) => {
-      const doctor = req.body;
-      console.log(doctor);
-      const result = await doctorsDb.insertOne(doctor)
-      res.send(result)
+    const departmentsCollection = client
+      .db("ManagementHospital")
+      .collection("departmentsCollection");
+
+    //get all doctor
+    app.get("/doctors", async (req, res) => {
+      const query = {};
+      const allDoctors = await doctorsCollection.find(query).toArray();
+      res.send(allDoctors);
     });
-       
-    
-    
 
+    //get all departments
+    app.get("/departments", async (req, res) => {
+      const query = {};
+      const allDepartments = await departmentsCollection.find(query).toArray();
+      res.send(allDepartments);
+    });
+
+    //get all doctors
+    app.get("/treatments", async (req, res) => {
+      const query = {};
+      const allTreatments = await treatmentsCollection.find(query).toArray();
+      res.send(allTreatments);
+    });
+
+    //get treatmens by departments
+    app.get("/departments/:treatment", async (req, res) => {
+      const treatment = req.params.treatment;
+      const query = { department: treatment };
+      const allTreatments = await treatmentsCollection.find(query).toArray();
+      res.send(allTreatments);
+    });
+
+    //get treatments by doctor id
+
+    app.get("/doctors/:treatment", async (req, res) => {
+      const treatment = parseInt(req.params.treatment);
+      const query = { doctorCode: treatment };
+      const allTreatments = await treatmentsCollection.find(query).toArray();
+      res.send(allTreatments);
+    });
+
+    //get treatment details by id
+
+    app.get("/treatments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const treatment = await treatmentsCollection.findOne(query);
+      res.send(treatment);
+    });
+
+    //get doctor details by id
+
+    app.get("/doctor/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const doctor = await doctorsCollection.findOne(query);
+      res.send(doctor);
+    });
+
+
+
+    //post doctors this is for dashboard
+    app.post("/doctors", async (req, res) => {
+      const doctor = req.body;
+      const result = await doctorsCollection.insertOne(doctor);
+      res.send(result);
+    });
   }
   finally {
 
