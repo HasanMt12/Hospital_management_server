@@ -92,8 +92,9 @@ async function run() {
       res.send(doctor);
     });
 
+    
+    
     //get featured doctor
-
    app.get("/featureddoctors", async (req, res) => {
      const query = { isFeatured:true };
      const allDoctors = await doctorsCollection.find(query).toArray();
