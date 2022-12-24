@@ -50,7 +50,7 @@ async function run() {
       res.send(allDepartments);
     });
 
-    //get all doctors
+    //get all treatments
     app.get("/treatments", async (req, res) => {
       const query = {};
       const allTreatments = await treatmentsCollection.find(query).toArray();
@@ -91,6 +91,15 @@ async function run() {
       const doctor = await doctorsCollection.findOne(query);
       res.send(doctor);
     });
+
+    
+    
+    //get featured doctor
+   app.get("/featureddoctors", async (req, res) => {
+     const query = { isFeatured:true };
+     const allDoctors = await doctorsCollection.find(query).toArray();
+     res.send(allDoctors);
+   });
 
 
 
