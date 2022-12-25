@@ -46,7 +46,7 @@ async function run() {
       res.send(allDepartments);
     });
 
-    //get all doctors
+    //get all treatments
     app.get("/treatments", async (req, res) => {
       const query = {};
       const allTreatments = await treatmentsCollection.find(query).toArray();
