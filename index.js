@@ -1,7 +1,11 @@
 const express = require('express')
 require("dotenv").config();
 const cors = require('cors')
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const {
+  MongoClient,
+  ServerApiVersion,
+  ObjectId
+} = require("mongodb");
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -60,7 +64,9 @@ async function run() {
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
-      const query = { department: treatment };
+      const query = {
+        department: treatment
+      };
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
@@ -69,7 +75,9 @@ async function run() {
 
     app.get("/doctors/:treatment", async (req, res) => {
       const treatment = parseInt(req.params.treatment);
-      const query = { doctorCode: treatment };
+      const query = {
+        doctorCode: treatment
+      };
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
@@ -78,7 +86,9 @@ async function run() {
 
     app.get("/treatments/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: ObjectId(id) };
+      const query = {
+        _id: ObjectId(id)
+      };
       const treatment = await treatmentsCollection.findOne(query);
       res.send(treatment);
     });
@@ -87,22 +97,26 @@ async function run() {
 
     app.get("/doctor/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: ObjectId(id) };
+      const query = {
+        _id: ObjectId(id)
+      };
       const doctor = await doctorsCollection.findOne(query);
       res.send(doctor);
     });
 
-    
-    
+
+
     //get featured doctor
-   app.get("/featureddoctors", async (req, res) => {
-     const query = { isFeatured:true };
-     const allDoctors = await doctorsCollection.find(query).toArray();
-     res.send(allDoctors);
-   });
+    app.get("/featureddoctors", async (req, res) => {
+      const query = {
+        isFeatured: true
+      };
+      const allDoctors = await doctorsCollection.find(query).toArray();
+      res.send(allDoctors);
+    });
 
 
-  //ok push dilam
+    //ok push dilam
 
     //post doctors this is for dashboard
     app.post("/doctors", async (req, res) => {
@@ -110,8 +124,7 @@ async function run() {
       const result = await doctorsCollection.insertOne(doctor);
       res.send(result);
     });
-  }
-  finally {
+  } finally {
 
   }
 }
