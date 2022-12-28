@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const data = await doctorsCollection.find({}).toArray();
-    res.status(200).send({ data: data });
+    res.status(200).send(data);
   } catch (error) {
     res.send({ error: error.message });
   }
@@ -23,7 +23,7 @@ router.get("/featured", async (req, res) => {
       isFeatured: true,
     };
     const data = await doctorsCollection.find(filter).toArray();
-    res.status(200).send({ data: data });
+    res.status(200).send(data);
   } catch (error) {
     res.send({ error: error.message });
   }
@@ -37,7 +37,7 @@ router.get("/:id", async (req, res) => {
       _id: ObjectId(id),
     };
     const doctor = await doctorsCollection.findOne(query);
-    res.status(200).send({ data: doctor });
+    res.status(200).send(doctor);
   } catch (error) {
     res.send({ error: error.message });
   }
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
   try {
     const doctor = req.body;
     const result = await doctorsCollection.insertOne(doctor);
-    res.status(200).send({ data: result });
+    res.status(200).send(result);
   } catch (error) {
     res.send({ error: error.message });
   }
@@ -62,7 +62,7 @@ router.delete("/:id", async (req, res) => {
       _id: ObjectId(id),
     };
     const result = doctorsCollection.deleteOne(filter);
-    res.status(200).send({ data: result });
+    res.status(200).send(result);
   } catch (error) {
     res.status(404).send({ error: error.message });
   }
