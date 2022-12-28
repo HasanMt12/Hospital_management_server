@@ -102,6 +102,7 @@ async function run() {
    });
 
 
+  //ok push dilam
 
     //post doctors this is for dashboard
     app.post("/doctors", async (req, res) => {
