@@ -6,9 +6,17 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
+    const size = parseInt(req.query.size);
+    const page = parseInt(req.query.page);
     const query = {};
-    const allDepartments = await departmentsCollection.find(query).toArray();
-    res.send(allDepartments);
+    const count = await departmentsCollection.estimatedDocumentCount();
+    const allDepartments = await departmentsCollection
+      .find(query)
+      .skip(size * page)
+      .limit(size)
+      .toArray();
+    res.send({ count, allDepartments });
+    console.log(size, page);
   } catch (error) {
     res.send({ error: error.message });
   }
