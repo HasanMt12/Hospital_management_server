@@ -6,6 +6,8 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     res.send("route is okay");
+
+    
   } catch (error) {
     res.send({ error: error.message });
   }
