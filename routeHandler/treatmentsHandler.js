@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   try {
     const query = {};
     const allTreatments = await treatmentsCollection.find(query).toArray();
-    res.send({ data: allTreatments });
+    res.send(allTreatments);
   } catch (error) {
     res.send({ error: error.message });
   }

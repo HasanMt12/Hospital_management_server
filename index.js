@@ -8,6 +8,7 @@ const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
 const { treatmentsCollection } = require("./collections/collections");
+const userHandler = require("./routeHandler/userHandler");
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -32,6 +33,8 @@ async function run() {
     //treatments route handler
     app.use("/treatment", treatmentHandler);
 
+    app.use("/user", userHandler);
+
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
@@ -55,7 +58,7 @@ async function run() {
   } finally {
   }
 }
-
+// added comment
 run().catch((error) => console.log(error));
 
 app.get("/", (req, res) => {
