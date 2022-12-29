@@ -1,7 +1,15 @@
-const express = require('express')
+const express = require("express");
 require("dotenv").config();
-const cors = require('cors')
+const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+
+const doctorsHandler = require("./routeHandler/dorctorsHandler");
+const depertmentHandler = require("./routeHandler/depertmentHandler");
+const treatmentHandler = require("./routeHandler/treatmentsHandler");
+const userHandler = require("./routeHandler/userHandler");
+const appointmentsHandler = require("./routeHandler/appointmentHanlder");
+const { treatmentsCollection } = require("./collections/collections");
+const addStuffHandler = require("./routeHandler/addStuffHandler");
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -11,56 +19,42 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
 
-
-
 async function run() {
   try {
-    const doctorsCollection = client
-      .db("ManagementHospital")
-      .collection("doctorsCollection");
+    // doctors route handler
+    app.use("/doctor", doctorsHandler);
 
-    const treatmentsCollection = client
-      .db("ManagementHospital")
-      .collection("treatmentsCollection");
+    //departments route handler
+    app.use("/departments", depertmentHandler);
 
-    const departmentsCollection = client
-      .db("ManagementHospital")
-      .collection("departmentsCollection");
+    // extra routes agacha
 
-    //get all doctor
-    app.get("/doctors", async (req, res) => {
-      const query = {};
-      const allDoctors = await doctorsCollection.find(query).toArray();
-      res.send(allDoctors);
-    });
+    //treatments route handler
+    app.use("/treatment", treatmentHandler);
+    //user route handler
+    app.use("/user", userHandler);
 
-    //get all departments
-    app.get("/departments", async (req, res) => {
-      const query = {};
-      const allDepartments = await departmentsCollection.find(query).toArray();
-      res.send(allDepartments);
-    });
+    //appointments route handler
+    app.use("/appointment", appointmentsHandler);
 
-    //get all treatments
-    app.get("/treatments", async (req, res) => {
-      const query = {};
-      const allTreatments = await treatmentsCollection.find(query).toArray();
-      res.send(allTreatments);
-    });
+    // ADD Stuff Handler
+    app.use("/addStuff", addStuffHandler);
 
+
+    
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
-      const query = { department: treatment };
+      const query = {
+        department: treatment,
+      };
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
@@ -69,7 +63,9 @@ async function run() {
 
     app.get("/doctors/:treatment", async (req, res) => {
       const treatment = parseInt(req.params.treatment);
-      const query = { doctorCode: treatment };
+      const query = {
+        doctorCode: treatment,
+      };
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
@@ -83,7 +79,7 @@ async function run() {
       res.send(treatment);
     });
 
-    //get doctor details by id
+    /* //get doctor details by id
 
     app.get("/doctor/:id", async (req, res) => {
       const id = req.params.id;
@@ -95,22 +91,14 @@ async function run() {
     
     
     //get featured doctor
-   app.get("/featureddoctors", async (req, res) => {
-     const query = { isFeatured:true };
-     const allDoctors = await doctorsCollection.find(query).toArray();
-     res.send(allDoctors);
-   });
+  //  app.get("/featureddoctors", async (req, res) => {
+  //    const query = { isFeatured:true };
+  //    const allDoctors = await doctorsCollection.find(query).toArray();
+  //    res.send(allDoctors);
+  //  });
 
 
-   app.get("user", async (req,res)=>{
-      const email = req.query?.email;
-      const user = await Alluser.find({
-        isUsers: true,
-        email: {$ne: email},
-        isDeleted: false,
-      }).toArray();
-      res.json(user);
-   })
+   
 
 
 
@@ -119,20 +107,17 @@ async function run() {
       const doctor = req.body;
       const result = await doctorsCollection.insertOne(doctor);
       res.send(result);
-    });
-  }
-  finally {
-
+    }); */
+  } finally {
   }
 }
-
+// added comment
 run().catch((error) => console.log(error));
 
-
-app.get('/', (req, res) => {
-  res.send('Hello From webCracker!')
-})
+app.get("/", (req, res) => {
+  res.send("Hello From webCracker!");
+});
 
 app.listen(port, () => {
-  console.log(`WebCracker App listening on port ${port}`)
-})
+  console.log(`WebCracker App listening on port ${port}`);
+});
