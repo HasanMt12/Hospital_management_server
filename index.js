@@ -7,7 +7,9 @@ const doctorsHandler = require("./routeHandler/dorctorsHandler");
 const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
+const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
+
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -31,8 +33,11 @@ async function run() {
 
     //treatments route handler
     app.use("/treatment", treatmentHandler);
-
+    //user route handler
     app.use("/user", userHandler);
+
+    //appointments route handler
+    app.use("/appointment", appointmentsHandler);
 
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {

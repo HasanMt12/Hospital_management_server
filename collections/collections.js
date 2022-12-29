@@ -20,10 +20,14 @@ const treatmentsCollection = client
 const departmentsCollection = client
   .db("ManagementHospital")
   .collection("departmentsCollection");
+const appointmentsCollection = client
+  .db("ManagementHospital")
+  .collection("appointmentCollection");
 
 const collection = {
   doctorsCollection,
   treatmentsCollection,
   departmentsCollection,
+  appointmentsCollection,
 };
 module.exports = collection;
