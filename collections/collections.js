@@ -24,10 +24,15 @@ const appointmentsCollection = client
   .db("ManagementHospital")
   .collection("appointmentCollection");
 
+const usersCollection = client
+  .db("ManagementHospital")
+  .collection("usersCollection");
+
 const collection = {
   doctorsCollection,
   treatmentsCollection,
   departmentsCollection,
   appointmentsCollection,
+  usersCollection
 };
 module.exports = collection;
