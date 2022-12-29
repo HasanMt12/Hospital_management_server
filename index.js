@@ -8,7 +8,7 @@ const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
 const { treatmentsCollection } = require("./collections/collections");
-const userHandler = require("./routeHandler/userHandler");
+
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -25,8 +25,7 @@ async function run() {
     //departments route handler
     app.use("/departments", depertmentHandler);
 
-    //users route handler
-    app.use("/user", userHandler);
+
 
     // extra routes agacha
 
