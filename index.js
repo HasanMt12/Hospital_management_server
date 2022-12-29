@@ -9,7 +9,9 @@ const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
 const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
+
 const addStuffHandler = require("./routeHandler/addStuffHandler");
+
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -19,13 +21,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
-
 async function run() {
   try {
     // doctors route handler
@@ -33,6 +28,7 @@ async function run() {
 
     //departments route handler
     app.use("/departments", depertmentHandler);
+
 
     // extra routes agacha
 
@@ -44,8 +40,10 @@ async function run() {
     //appointments route handler
     app.use("/appointment", appointmentsHandler);
 
+
     // ADD Stuff Handler
     app.use("/addStuff", addStuffHandler);
+
 
 
     
@@ -69,6 +67,7 @@ async function run() {
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
+
 
     //get treatment details by id
 
@@ -108,6 +107,7 @@ async function run() {
       const result = await doctorsCollection.insertOne(doctor);
       res.send(result);
     }); */
+
   } finally {
   }
 }
