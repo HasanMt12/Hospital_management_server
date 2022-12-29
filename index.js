@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express')
 require("dotenv").config();
-const cors = require("cors");
+const cors = require('cors')
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const port = process.env.PORT || 5000;
@@ -11,12 +11,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
+
+const uri =
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
+
+
 
 async function run() {
   try {
@@ -88,22 +92,47 @@ async function run() {
       res.send(doctor);
     });
 
+    
+    
+    //get featured doctor
+   app.get("/featureddoctors", async (req, res) => {
+     const query = { isFeatured:true };
+     const allDoctors = await doctorsCollection.find(query).toArray();
+     res.send(allDoctors);
+   });
+
+
+   app.get("user", async (req,res)=>{
+      const email = req.query?.email;
+      const user = await Alluser.find({
+        isUsers: true,
+        email: {$ne: email},
+        isDeleted: false,
+      }).toArray();
+      res.json(user);
+   })
+
+
+
     //post doctors this is for dashboard
     app.post("/doctors", async (req, res) => {
       const doctor = req.body;
       const result = await doctorsCollection.insertOne(doctor);
       res.send(result);
     });
-  } finally {
+  }
+  finally {
+
   }
 }
 
 run().catch((error) => console.log(error));
 
-app.get("/", (req, res) => {
-  res.send("Hello From webCracker!");
-});
+
+app.get('/', (req, res) => {
+  res.send('Hello From webCracker!')
+})
 
 app.listen(port, () => {
-  console.log(`WebCracker App listening on port ${port}`);
-});
+  console.log(`WebCracker App listening on port ${port}`)
+})
