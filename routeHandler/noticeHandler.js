@@ -5,18 +5,18 @@ const {
     noticeCollection
 } = require("../collections/collections");
 
-router.get("/", async (req, res) => {
-  try {
+// router.get("/", async (req, res) => {
+//   try {
      
   // console.log(user);
 
-  res.send("notice route connected");
-  } catch (error) {
-    res.send({
-      error: error.message
-    });
-  }
-});
+//   res.send("notice route connected");
+//   } catch (error) {
+//     res.send({
+//       error: error.message
+//     });
+//   }
+// });
 
 // post doctor
 router.post("/", async (req, res) => {
@@ -31,8 +31,11 @@ router.post("/", async (req, res) => {
     }
 });
 
-
-
+ router.get('/', async (req, res) => {
+      const query = {};
+      const users = await noticeCollection.find(query).toArray();
+      res.send(users);
+    })
 
 
 module.exports = router;
