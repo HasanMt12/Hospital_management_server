@@ -28,11 +28,17 @@ const usersCollection = client
   .db("ManagementHospital")
   .collection("usersCollection");
 
+  const noticeCollection = client
+
+    .db("ManagementHospital")
+    .collection("noticeCollection");
+
 const collection = {
   doctorsCollection,
   treatmentsCollection,
   departmentsCollection,
   appointmentsCollection,
-  usersCollection
+  usersCollection,
+   noticeCollection
 };
 module.exports = collection;

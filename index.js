@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-
+const noticeHandler = require("./routeHandler/noticeHandler");
 const doctorsHandler = require("./routeHandler/dorctorsHandler");
 const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
@@ -27,7 +27,8 @@ async function run() {
     //departments route handler
     app.use("/departments", depertmentHandler);
 
-
+    //notice route handler
+    app.use("/notice", noticeHandler);
 
     // extra routes agacha
 
