@@ -10,6 +10,8 @@ const userHandler = require("./routeHandler/userHandler");
 const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
 
+const addStuffHandler = require("./routeHandler/addStuffHandler");
+
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -27,8 +29,10 @@ async function run() {
     //departments route handler
     app.use("/departments", depertmentHandler);
 
+
     //notice route handler
     app.use("/notice", noticeHandler);
+
 
     // extra routes agacha
 
@@ -40,6 +44,13 @@ async function run() {
     //appointments route handler
     app.use("/appointment", appointmentsHandler);
 
+
+    // ADD Stuff Handler
+    app.use("/addStuff", addStuffHandler);
+
+
+
+    
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
@@ -60,6 +71,47 @@ async function run() {
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
+
+
+    //get treatment details by id
+
+    app.get("/treatments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const treatment = await treatmentsCollection.findOne(query);
+      res.send(treatment);
+    });
+
+    /* //get doctor details by id
+
+    app.get("/doctor/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const doctor = await doctorsCollection.findOne(query);
+      res.send(doctor);
+    });
+
+    
+    
+    //get featured doctor
+  //  app.get("/featureddoctors", async (req, res) => {
+  //    const query = { isFeatured:true };
+  //    const allDoctors = await doctorsCollection.find(query).toArray();
+  //    res.send(allDoctors);
+  //  });
+
+
+   
+
+
+
+    //post doctors this is for dashboard
+    app.post("/doctors", async (req, res) => {
+      const doctor = req.body;
+      const result = await doctorsCollection.insertOne(doctor);
+      res.send(result);
+    }); */
+
   } finally {
   }
 }
