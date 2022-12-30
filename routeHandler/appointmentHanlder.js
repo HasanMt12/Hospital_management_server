@@ -1,6 +1,6 @@
 const express = require("express");
 const { ObjectId } = require("mongodb");
-const { appointmentsCollection } = require("../collections/collections");
+const { appointmentsCollection, treatmentsCollection } = require("../collections/collections");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -39,15 +39,43 @@ router.put("/:id", async (req, res) => {
     res.send({ error: error.message });
   }
 });
+
+
+
 router.post("/", async (req, res) => {
   try {
     const doc = req.body;
-    const data = await appointmentsCollection.insertOne(doc);
-    res.send(data);
+    const date = doc.bookedDate;
+    // console.log(doc)
+    const name = doc.serviceName;
+    const bookingQuery = { bookedDate:date };
+    const alreadyBooked = await appointmentsCollection.find(bookingQuery).toArray()
+    // console.log(alreadyBooked)
+    const serviceQuery = req.query.name;
+    const services = await treatmentsCollection
+      .find({ department:serviceQuery })
+      .toArray();
+    services.forEach(service=>{
+      const optionBooked = alreadyBooked.filter(book=>
+        book.serviceName === service.name);
+        const bookedSlots = optionBooked.map(book=>book.slot)
+        const remaingSlots = service.timeSlot.filter((slot) => !bookedSlots.includes(slot));
+        service.timeSlot  = remaingSlots
+
+      console.log(date, service.name, remaingSlots.length);
+    })
+
+    const data = await appointmentsCollection.insertOne(doc)
+    res.send(services);
+    
+   
   } catch (error) {
     res.send({ error: error.message });
   }
 });
+
+
+
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;

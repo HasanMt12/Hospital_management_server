@@ -40,7 +40,7 @@ const collection = {
   departmentsCollection,
   appointmentsCollection,
 
-  addStuffCollection
+  addStuffCollection,
 
   usersCollection
 
