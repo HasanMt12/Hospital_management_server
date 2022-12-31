@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const {
   doctorsCollection,
   treatmentsCollection,
+  appointmentsCollection,
 } = require("../collections/collections");
 const router = express.Router();
 
@@ -67,6 +68,5 @@ router.delete("/:id", async (req, res) => {
     res.status(404).send({ error: error.message });
   }
 });
-
 
 module.exports = router;

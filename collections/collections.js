@@ -24,7 +24,6 @@ const appointmentsCollection = client
   .db("ManagementHospital")
   .collection("appointmentCollection");
 
-
 const addStuffCollection = client
   .db("ManagementHospital")
   .collection("addStuffCollection");
@@ -34,11 +33,11 @@ const usersCollection = client
   .collection("usersCollection");
 
 
+
   const noticeCollection = client
 
     .db("ManagementHospital")
     .collection("noticeCollection");
-
 
 const collection = {
   doctorsCollection,
@@ -55,5 +54,6 @@ const collection = {
  
 
 
+  usersCollection,
 };
 module.exports = collection;

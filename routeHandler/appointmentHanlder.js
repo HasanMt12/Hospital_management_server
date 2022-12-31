@@ -5,6 +5,18 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
+    const email = req.query.email;
+    console.log(email);
+    const data = await appointmentsCollection
+      .find({ patientEmail: email })
+      .toArray();
+    res.send(data);
+  } catch (error) {
+    res.send({ error: error.message });
+  }
+});
+router.get("/all", async (req, res) => {
+  try {
     const data = await appointmentsCollection.find({}).toArray();
     res.send(data);
   } catch (error) {
@@ -23,6 +35,7 @@ router.get("/:id", async (req, res) => {
     res.send({ error: error.message });
   }
 });
+
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
