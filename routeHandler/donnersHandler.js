@@ -1,15 +1,14 @@
 const express = require("express");
 const { ObjectId } = require("mongodb");
-const { appointmentsCollection } = require("../collections/collections");
+const {
+  appointmentsCollection,
+  donnerCollection,
+} = require("../collections/collections");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const email = req.query.email;
-    console.log(email);
-    const data = await appointmentsCollection
-      .find({ patientEmail: email })
-      .toArray();
+    const data = await donnerCollection.find({}).toArray();
     res.send(data);
   } catch (error) {
     res.send({ error: error.message });
@@ -17,41 +16,24 @@ router.get("/", async (req, res) => {
 });
 router.get("/all", async (req, res) => {
   try {
-    const data = await appointmentsCollection.find({}).toArray();
+    const data = await donnerCollection.find({}).toArray();
     res.send(data);
   } catch (error) {
     res.send({ error: error.message });
   }
 });
-router.get("/", async (req, res) => {
-  const email = req.query.email;
-
-  const query = { email: email };
-  const bookings = await appointmentsCollection.find(query).toArray();
-  res.send(bookings);
-});
-
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const query = {
       _id: ObjectId(id),
     };
-    const data = await appointmentsCollection.findOne(query);
+    const data = await donnerCollection.findOne(query);
     res.send(data);
   } catch (error) {
     res.send({ error: error.message });
   }
 });
-
-//  // -------Payment--------
-//  app.get("/appointment/:id", async (req, res) => {
-//   const id = req.params.id;
-//   const query = { _id: ObjectId(id) };
-//   const booking = await bookingsCollection.findOne(query);
-//   res.send(booking);
-// });
-
 
 router.put("/:id", async (req, res) => {
   try {
@@ -63,7 +45,7 @@ router.put("/:id", async (req, res) => {
     const updatedDoc = {
       $set: doc,
     };
-    const data = await appointmentsCollection.updateOne(filter, updatedDoc);
+    const data = await donnerCollection.updateOne(filter, updatedDoc);
     res.send(data);
   } catch (error) {
     res.send({ error: error.message });
@@ -72,7 +54,7 @@ router.put("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const doc = req.body;
-    const data = await appointmentsCollection.insertOne(doc);
+    const data = await donnerCollection.insertOne(doc);
     res.send(data);
   } catch (error) {
     res.send({ error: error.message });
@@ -84,7 +66,7 @@ router.delete("/:id", async (req, res) => {
     const filter = {
       _id: ObjectId(id),
     };
-    const data = await appointmentsCollection.deleteOne(filter);
+    const data = await donnerCollection.deleteOne(filter);
     res.send(data);
   } catch (error) {
     res.send({ error: error.message });

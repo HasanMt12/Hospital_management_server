@@ -5,16 +5,21 @@ const port = process.env.PORT || 5000;
 const http = require ('http')
 const { Server } = require("socket.io");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-
+const noticeHandler = require("./routeHandler/noticeHandler");
 const doctorsHandler = require("./routeHandler/dorctorsHandler");
 const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
+const donnerHandler = require("./routeHandler/donnersHandler");
 const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
 
 const addStuffHandler = require("./routeHandler/addStuffHandler");
 
+
+
+
+const port = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
@@ -59,6 +64,11 @@ async function run() {
     app.use("/departments", depertmentHandler);
 
 
+
+    //notice route handler
+    app.use("/notice", noticeHandler);
+
+
     // extra routes agacha
 
     //treatments route handler
@@ -69,14 +79,13 @@ async function run() {
     //appointments route handler
     app.use("/appointment", appointmentsHandler);
 
-
     // ADD Stuff Handler
     app.use("/addStuff", addStuffHandler);
   
 
+    //add doners route
 
-
-    
+    app.use("/donner", donnerHandler);
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
@@ -97,7 +106,6 @@ async function run() {
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
-
 
     //get treatment details by id
 
@@ -139,6 +147,7 @@ async function run() {
     }); */
 
 
+
     
     // ------Payment-gateway------
     app.post("/create-payment-intent", async (req, res) => {
@@ -176,6 +185,7 @@ async function run() {
       res.send(result);
     });
 
+
   } finally {
   }
 }
@@ -189,6 +199,11 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`WebCracker App listening on port ${port}`);
 });
+
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+
+
+
+
