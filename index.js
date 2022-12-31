@@ -7,6 +7,7 @@ const doctorsHandler = require("./routeHandler/dorctorsHandler");
 const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
+const donnerHandler = require("./routeHandler/donnersHandler");
 const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
 
@@ -47,6 +48,9 @@ async function run() {
     // ADD Stuff Handler
     app.use("/addStuff", addStuffHandler);
 
+    //add doners route
+
+    app.use("/donner", donnerHandler);
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
