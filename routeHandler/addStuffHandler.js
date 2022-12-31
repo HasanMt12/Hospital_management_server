@@ -5,13 +5,13 @@ const router = express.Router();
 
 // demo code
 
-router.get("/", async (req, res) => {
-  try {
-    res.send("add stuff route is okay");
-  } catch (error) {
-    res.send({ error: error.message });
-  }
-});
+// router.get("/", async (req, res) => {
+//   try {
+//     res.send("add stuff route is okay");
+//   } catch (error) {
+//     res.send({ error: error.message });
+//   }
+// });
 
 /* -----Add Stuff-------- */
 try {
