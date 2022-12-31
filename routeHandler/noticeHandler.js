@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const {  ObjectId } = require("mongodb");
 const {
     noticeCollection
 } = require("../collections/collections");
@@ -36,6 +36,18 @@ router.post("/", async (req, res) => {
       const users = await noticeCollection.find(query).toArray();
       res.send(users);
     })
-
+ router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const filter = {
+      _id: ObjectId(id),
+    };
+    
+    const result = noticeCollection.deleteOne(filter);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(404).send({ error: error.message });
+  }
+});
 
 module.exports = router;

@@ -49,7 +49,7 @@ const collection = {
    noticeCollection,
 
 
-  addStuffCollection
+  addStuffCollection,
 
  
 
