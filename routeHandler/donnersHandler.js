@@ -73,4 +73,17 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// router.get("/", async (req, res) => {
+//   try {
+//     const email = req.query.email;
+//     console.log(email);
+//     const data = await appointmentsCollection
+//       .find({ patientEmail: email })
+//       .toArray();
+//     res.send(data);
+//   } catch (error) {
+//     res.send({ error: error.message });
+//   }
+// });
+
 module.exports = router;

@@ -1,7 +1,6 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const noticeHandler = require("./routeHandler/noticeHandler");
 const doctorsHandler = require("./routeHandler/dorctorsHandler");
 const depertmentHandler = require("./routeHandler/depertmentHandler");
@@ -9,126 +8,73 @@ const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
 const donnerHandler = require("./routeHandler/donnersHandler");
 const appointmentsHandler = require("./routeHandler/appointmentHanlder");
-const { treatmentsCollection } = require("./collections/collections");
-
+const paymentHandler = require("./routeHandler/paymentHandler");
 const addStuffHandler = require("./routeHandler/addStuffHandler");
-
-
+const { server } = require("./socketHandler/ChatHandler");
 const port = process.env.PORT || 5000;
+const serverPort = 3001;
+
 const app = express();
 
 //middleware
-
 app.use(cors());
 app.use(express.json());
 
 async function run() {
   try {
     // doctors route handler
+    // get and post route :/doctor && update and delete : /doctor/:id
     app.use("/doctor", doctorsHandler);
 
-    //departments route handler
+    // departments route handler
+    // get and post route :/departments && update and delete : /departments/:id
     app.use("/departments", depertmentHandler);
 
-
-    //notice route handler
+    // notice route handler
+    // get and post route :/notice && update and delete : notice/:id
     app.use("/notice", noticeHandler);
 
-
-    // extra routes agacha
-
-    //treatments route handler
+    // treatments route handler
+    // get and post route :/treatment && update and delete : treatment/:id
     app.use("/treatment", treatmentHandler);
-    //user route handler
+
+    // user route handler
+    // get and post route :/user && update and delete : /user/:id
     app.use("/user", userHandler);
 
-    //appointments route handler
+    // appointments route handler
+    // get and post route :/appointment && update and delete : appointment/:id
     app.use("/appointment", appointmentsHandler);
 
-
     // ADD Stuff Handler
+    // get and post route : /addStuff && update and delete route : /addStuff/:id
     app.use("/addStuff", addStuffHandler);
 
-
-
-
-    
-
     //add doners route
-
+    // get and post route : /donner && update and delete route : /donner:id
     app.use("/donner", donnerHandler);
 
-    //get treatmens by departments
-    app.get("/departments/:treatment", async (req, res) => {
-      const treatment = req.params.treatment;
-      const query = {
-        department: treatment,
-      };
-      const allTreatments = await treatmentsCollection.find(query).toArray();
-      res.send(allTreatments);
-    });
-
-    //get treatments by doctor id
-
-    app.get("/doctors/:treatment", async (req, res) => {
-      const treatment = parseInt(req.params.treatment);
-      const query = {
-        doctorCode: treatment,
-      };
-      const allTreatments = await treatmentsCollection.find(query).toArray();
-      res.send(allTreatments);
-    });
-
-
-    //get treatment details by id
-
-    app.get("/treatments/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const treatment = await treatmentsCollection.findOne(query);
-      res.send(treatment);
-    });
-
-    /* //get doctor details by id
-
-    app.get("/doctor/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const doctor = await doctorsCollection.findOne(query);
-      res.send(doctor);
-    });
-
-    
-    
-    //get featured doctor
-  //  app.get("/featureddoctors", async (req, res) => {
-  //    const query = { isFeatured:true };
-  //    const allDoctors = await doctorsCollection.find(query).toArray();
-  //    res.send(allDoctors);
-  //  });
-
-
-   
-
-
-
-    //post doctors this is for dashboard
-    app.post("/doctors", async (req, res) => {
-      const doctor = req.body;
-      const result = await doctorsCollection.insertOne(doctor);
-      res.send(result);
-    }); */
-
+    // ------Payment-gateway------
+    // create payment-intent : /payment/create-payment-intent
+    // post payment info : /payment/payments
+    app.use("/payment", paymentHandler);
   } finally {
   }
 }
 // added comment
 run().catch((error) => console.log(error));
 
+// default route
 app.get("/", (req, res) => {
   res.send("Hello From webCracker!");
 });
 
+// Listen our api
 app.listen(port, () => {
   console.log(`WebCracker App listening on port ${port}`);
+});
+
+// Listen our chating server
+server.listen(serverPort, () => {
+  console.log("SERVER RUNNING");
 });

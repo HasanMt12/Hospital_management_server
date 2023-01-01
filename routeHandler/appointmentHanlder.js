@@ -35,6 +35,14 @@ router.get("/all", async (req, res) => {
     res.send({ error: error.message });
   }
 });
+router.get("/", async (req, res) => {
+  const email = req.query.email;
+
+  const query = { email: email };
+  const bookings = await appointmentsCollection.find(query).toArray();
+  res.send(bookings);
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
@@ -47,6 +55,16 @@ router.get("/:id", async (req, res) => {
     res.send({ error: error.message });
   }
 });
+
+//  // -------Payment--------
+//  app.get("/appointment/:id", async (req, res) => {
+//   const id = req.params.id;
+//   const query = { _id: ObjectId(id) };
+//   const booking = await bookingsCollection.findOne(query);
+//   res.send(booking);
+// });
+
+
 
 router.put("/:id", async (req, res) => {
   try {

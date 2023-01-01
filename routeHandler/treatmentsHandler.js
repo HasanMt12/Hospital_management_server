@@ -15,6 +15,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/departments/:treatment", async (req, res) => {
+  const treatment = req.params.treatment;
+  const query = {
+    department: treatment,
+  };
+  const allTreatments = await treatmentsCollection.find(query).toArray();
+  res.send(allTreatments);
+});
+
+router.get("/doctors/:treatment", async (req, res) => {
+  const treatment = parseInt(req.params.treatment);
+  const query = {
+    doctorCode: treatment,
+  };
+  const allTreatments = await treatmentsCollection.find(query).toArray();
+  res.send(allTreatments);
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;

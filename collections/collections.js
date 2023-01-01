@@ -8,47 +8,41 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-
-const doctorsCollection = client
+const collection = {};
+collection.doctorsCollection = client
   .db("ManagementHospital")
   .collection("doctorsCollection");
 
-const treatmentsCollection = client
+collection.treatmentsCollection = client
   .db("ManagementHospital")
   .collection("treatmentsCollection");
 
-const departmentsCollection = client
+collection.departmentsCollection = client
   .db("ManagementHospital")
   .collection("departmentsCollection");
-const appointmentsCollection = client
+collection.appointmentsCollection = client
   .db("ManagementHospital")
   .collection("appointmentCollection");
 
-const addStuffCollection = client
+collection.addStuffCollection = client
   .db("ManagementHospital")
   .collection("addStuffCollection");
 
-const usersCollection = client
+collection.usersCollection = client
   .db("ManagementHospital")
   .collection("usersCollection");
 
-const noticeCollection = client
+collection.noticeCollection = client
 
   .db("ManagementHospital")
   .collection("noticeCollection");
 
-const donnerCollection = client
+collection.donnerCollection = client
   .db("ManagementHospital")
   .collection("donnerCollection");
 
-const collection = {
-  doctorsCollection,
-  treatmentsCollection,
-  departmentsCollection,
-  appointmentsCollection,
-  usersCollection,
-  noticeCollection,
-  addStuffCollection,
-  donnerCollection,
-};
+collection.paymentsCollection = client
+  .db("ManagementHospital")
+  .collection("paymentsCollection");
+
 module.exports = collection;
