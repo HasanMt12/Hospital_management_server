@@ -15,6 +15,18 @@ router.get("/", async (req, res) => {
     res.send({ error: error.message });
   }
 });
+router.get("/doctor", async (req, res) => {
+  try {
+    const email = req.query.email;
+    console.log(email);
+    const data = await appointmentsCollection
+      .find({ doctorEmail: email })
+      .toArray();
+    res.send(data);
+  } catch (error) {
+    res.send({ error: error.message });
+  }
+});
 router.get("/all", async (req, res) => {
   try {
     const data = await appointmentsCollection.find({}).toArray();

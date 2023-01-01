@@ -49,7 +49,6 @@ const collection = {
   usersCollection,
   noticeCollection,
   addStuffCollection,
-  usersCollection,
   donnerCollection,
 };
 module.exports = collection;
