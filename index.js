@@ -1,6 +1,9 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 const port = process.env.PORT || 5000;
 const http = require ('http')
 const { Server } = require("socket.io");
@@ -15,6 +18,21 @@ const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
 
 const addStuffHandler = require("./routeHandler/addStuffHandler");
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
+const appointmentsCollection = client
+  .db("ManagementHospital")
+  .collection("appointmentCollection");
+const paymentsCollection = client
+  .db("ManagementHospital")
+  .collection("paymentsCollection");
+
+
+
 
 
 
@@ -150,8 +168,11 @@ async function run() {
     // ------Payment-gateway------
     app.post("/create-payment-intent", async (req, res) => {
       const booking = req.body;
-      const price = booking.price;
-      const amount = price * 100;
+
+
+      const fee = booking.fee;
+      const amount = fee * 100;
+
 
       // Create a PaymentIntent with the order amount and currency
       const paymentIntent = await stripe.paymentIntents.create({
@@ -176,12 +197,16 @@ async function run() {
           transactionId: payment.transactionId,
         },
       };
-      const updatedResult = await bookingsCollection.updateOne(
+
+
+      const updatedResult = await appointmentsCollection.updateOne(
+
         filter,
         updatedDoc
       );
       res.send(result);
     });
+
 
 
   } finally {
@@ -197,6 +222,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`WebCracker App listening on port ${port}`);
 });
+
 
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
