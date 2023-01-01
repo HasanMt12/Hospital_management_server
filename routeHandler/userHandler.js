@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { ObjectId } = require("mongodb");
 
 const {
   usersCollection
@@ -48,6 +49,17 @@ router.post("/", async (req, res) => {
             const user = await usersCollection.findOne(query);
             res.send({ isNurse: user?.role === 'nurse'});
         });
+
+      try {
+  router.delete("/:id", async (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: ObjectId(id) };
+    const results = await usersCollection.deleteOne(filter);
+    res.send({  results });
+  });
+} catch (error) {
+  res.status(404).send({ error: error.message });
+}
 
 
 

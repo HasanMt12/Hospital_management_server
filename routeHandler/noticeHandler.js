@@ -36,18 +36,17 @@ router.post("/", async (req, res) => {
       const users = await noticeCollection.find(query).toArray();
       res.send(users);
     })
- router.delete("/:id", async (req, res) => {
+
+
   try {
+  router.delete("/:id", async (req, res) => {
     const id = req.params.id;
-    const filter = {
-      _id: ObjectId(id),
-    };
-    
-    const result = noticeCollection.deleteOne(filter);
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(404).send({ error: error.message });
-  }
-});
+    const filter = { _id: ObjectId(id) };
+    const results = await noticeCollection.deleteOne(filter);
+    res.send({  results });
+  });
+} catch (error) {
+  res.status(404).send({ error: error.message });
+}
 
 module.exports = router;

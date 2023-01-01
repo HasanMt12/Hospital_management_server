@@ -12,6 +12,7 @@ const { treatmentsCollection } = require("./collections/collections");
 
 const addStuffHandler = require("./routeHandler/addStuffHandler");
 
+
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -29,7 +30,6 @@ async function run() {
     app.use("/departments", depertmentHandler);
 
 
-
     //notice route handler
     app.use("/notice", noticeHandler);
 
@@ -44,9 +44,13 @@ async function run() {
     //appointments route handler
     app.use("/appointment", appointmentsHandler);
 
+
     // ADD Stuff Handler
     app.use("/addStuff", addStuffHandler);
 
+
+
+    
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
@@ -67,6 +71,7 @@ async function run() {
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
+
 
     //get treatment details by id
 
@@ -106,6 +111,7 @@ async function run() {
       const result = await doctorsCollection.insertOne(doctor);
       res.send(result);
     }); */
+
   } finally {
   }
 }
@@ -119,7 +125,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`WebCracker App listening on port ${port}`);
 });
-
-// amake user email diye collection get korte hobe
-//then user email a jomakrito collection and sloct collection er moddhe aggrigate korte hobe
-// jodi konota mile jay tahole seta bad diye onnogula dekhate hobe
