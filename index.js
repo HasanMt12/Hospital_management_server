@@ -22,11 +22,11 @@ app.use(express.json());
 
 async function run() {
   try {
-    // doctors route handler
+    // ------Doctor route handler------
     // get and post route :/doctor && update and delete : /doctor/:id
     app.use("/doctor", doctorsHandler);
 
-    // departments route handler
+    // ------departments Handler------
     // get and post route :/departments && update and delete : /departments/:id
     app.use("/departments", depertmentHandler);
 
@@ -34,7 +34,7 @@ async function run() {
     // get and post route :/notice && update and delete : notice/:id
     app.use("/notice", noticeHandler);
 
-    // treatments route handler
+    // ------treatment route handler------
     // get and post route :/treatment && update and delete : treatment/:id
     app.use("/treatment", treatmentHandler);
 
@@ -42,15 +42,15 @@ async function run() {
     // get and post route :/user && update and delete : /user/:id
     app.use("/user", userHandler);
 
-    // appointments route handler
+    // ------appoint route handler------
     // get and post route :/appointment && update and delete : appointment/:id
     app.use("/appointment", appointmentsHandler);
 
-    // ADD Stuff Handler
+    // ------add stuff route handler------
     // get and post route : /addStuff && update and delete route : /addStuff/:id
     app.use("/addStuff", addStuffHandler);
 
-    //add doners route
+    //------donner route------
     // get and post route : /donner && update and delete route : /donner:id
     app.use("/donner", donnerHandler);
 
