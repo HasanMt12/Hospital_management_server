@@ -29,6 +29,11 @@ const paymentsCollection = client
   .db("ManagementHospital")
   .collection("paymentsCollection");
 
+
+
+
+
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -72,7 +77,6 @@ async function run() {
     app.use("/departments", depertmentHandler);
 
 
-
     //notice route handler
     app.use("/notice", noticeHandler);
 
@@ -87,13 +91,20 @@ async function run() {
     //appointments route handler
     app.use("/appointment", appointmentsHandler);
 
+
     // ADD Stuff Handler
     app.use("/addStuff", addStuffHandler);
   
 
+
+
+
+    
+
     //add doners route
 
     app.use("/donner", donnerHandler);
+
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
@@ -114,6 +125,7 @@ async function run() {
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
+
 
     //get treatment details by id
 
@@ -156,6 +168,7 @@ async function run() {
 
 
 
+
     
     // ------Payment-gateway------
     app.post("/create-payment-intent", async (req, res) => {
@@ -194,6 +207,7 @@ async function run() {
     });
 
 
+
   } finally {
   }
 }
@@ -208,9 +222,11 @@ app.listen(port, () => {
   console.log(`WebCracker App listening on port ${port}`);
 });
 
+
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+
 
 
 
