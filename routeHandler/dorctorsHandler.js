@@ -1,9 +1,6 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const {
-  doctorsCollection,
-  treatmentsCollection,
-} = require("../collections/collections");
+const { doctorsCollection } = require("../collections/collections");
 const router = express.Router();
 
 // get all doctors
@@ -55,6 +52,23 @@ router.post("/", async (req, res) => {
   }
 });
 
+//update doctor
+router.put("/:id", async (req, res) => {
+  try {
+    const body = req.body;
+    const id = req.params.id;
+    const filter = {
+      _id: ObjectId(id),
+    };
+    const updatedDoc = {
+      $set: body,
+    };
+    const result = doctorsCollection.updateOne(filter, updatedDoc);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(404).send({ error: error.message });
+  }
+});
 //delete doctor
 router.delete("/:id", async (req, res) => {
   try {
@@ -68,6 +82,5 @@ router.delete("/:id", async (req, res) => {
     res.status(404).send({ error: error.message });
   }
 });
-
 
 module.exports = router;

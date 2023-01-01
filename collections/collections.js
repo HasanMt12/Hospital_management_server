@@ -32,14 +32,32 @@ const usersCollection = client
   .db("ManagementHospital")
   .collection("usersCollection");
 
+
+
+const noticeCollection = client
+
+  .db("ManagementHospital")
+  .collection("noticeCollection");
+
+const donnerCollection = client
+  .db("ManagementHospital")
+  .collection("donnerCollection");
+
+
 const collection = {
   doctorsCollection,
   treatmentsCollection,
   departmentsCollection,
   appointmentsCollection,
 
+
   addStuffCollection,
 
+ 
+  noticeCollection,
+  addStuffCollection,
   usersCollection,
+  donnerCollection,
+
 };
 module.exports = collection;

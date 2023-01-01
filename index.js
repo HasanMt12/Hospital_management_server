@@ -1,20 +1,33 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000;
 const http = require ('http')
 const { Server } = require("socket.io");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-
+const noticeHandler = require("./routeHandler/noticeHandler");
 const doctorsHandler = require("./routeHandler/dorctorsHandler");
 const depertmentHandler = require("./routeHandler/depertmentHandler");
 const treatmentHandler = require("./routeHandler/treatmentsHandler");
 const userHandler = require("./routeHandler/userHandler");
+const donnerHandler = require("./routeHandler/donnersHandler");
 const appointmentsHandler = require("./routeHandler/appointmentHanlder");
 const { treatmentsCollection } = require("./collections/collections");
 
 const addStuffHandler = require("./routeHandler/addStuffHandler");
-
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.glnuyrb.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
+const appointmentsCollection = client
+  .db("ManagementHospital")
+  .collection("appointmentCollection");
+const paymentsCollection = client
+  .db("ManagementHospital")
+  .collection("paymentsCollection");
 
 const app = express();
 const server = http.createServer(app);
@@ -59,6 +72,11 @@ async function run() {
     app.use("/departments", depertmentHandler);
 
 
+
+    //notice route handler
+    app.use("/notice", noticeHandler);
+
+
     // extra routes agacha
 
     //treatments route handler
@@ -69,14 +87,13 @@ async function run() {
     //appointments route handler
     app.use("/appointment", appointmentsHandler);
 
-
     // ADD Stuff Handler
     app.use("/addStuff", addStuffHandler);
   
 
+    //add doners route
 
-
-    
+    app.use("/donner", donnerHandler);
     //get treatmens by departments
     app.get("/departments/:treatment", async (req, res) => {
       const treatment = req.params.treatment;
@@ -97,7 +114,6 @@ async function run() {
       const allTreatments = await treatmentsCollection.find(query).toArray();
       res.send(allTreatments);
     });
-
 
     //get treatment details by id
 
@@ -139,12 +155,13 @@ async function run() {
     }); */
 
 
+
     
     // ------Payment-gateway------
     app.post("/create-payment-intent", async (req, res) => {
       const booking = req.body;
-      const price = booking.price;
-      const amount = price * 100;
+      const fee = booking.fee;
+      const amount = fee * 100;
 
       // Create a PaymentIntent with the order amount and currency
       const paymentIntent = await stripe.paymentIntents.create({
@@ -169,12 +186,13 @@ async function run() {
           transactionId: payment.transactionId,
         },
       };
-      const updatedResult = await bookingsCollection.updateOne(
+      const updatedResult = await appointmentsCollection.updateOne(
         filter,
         updatedDoc
       );
       res.send(result);
     });
+
 
   } finally {
   }
@@ -189,6 +207,10 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`WebCracker App listening on port ${port}`);
 });
+
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+
+
+
