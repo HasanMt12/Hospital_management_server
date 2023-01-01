@@ -46,6 +46,7 @@ router.post("/", async (req, res) => {
     const doctor = req.body;
     const result = await doctorsCollection.insertOne(doctor);
     res.status(200).send(result);
+    console.log(result);
   } catch (error) {
     res.send({ error: error.message });
   }
